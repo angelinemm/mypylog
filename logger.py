@@ -24,9 +24,9 @@ class Level(IntEnum):
 
 
 class Logger(object):
-    def __init__(self, logfile=None, log_level=Level.DEBUG):
+    def __init__(self, logfile=None, log_level=Level.DEBUG, buffer_size=None):
         if logfile:
-            self._log = open(logfile, 'a')
+            self._log = open(logfile, 'a', buffer_size)
         else:
             self._log = sys.stdout
         self._loglevel = log_level

@@ -2,7 +2,8 @@ from logger import Level, Logger
 import os
 
 
-LOG_FILE = './log'
+TEST_DIR = './nosetests'
+LOG_FILE = TEST_DIR + '/log'
 DEBUG_MESSAGE = "This is a debug message"
 INFO_MESSAGE = "This is an info message"
 WARNING_MESSAGE = "This is a warning message"
@@ -10,6 +11,7 @@ ERROR_MESSAGE = "This is an error message"
 
 
 def test_log():
+    os.mkdir(TEST_DIR)
     logger = Logger(LOG_FILE, buffer_size=1)
     logger.debug(DEBUG_MESSAGE)
     logger.info(INFO_MESSAGE)
@@ -30,3 +32,4 @@ def test_log():
             assert log_entries[index].endswith('%s: %s\n' % (level, message))
 
     os.remove(LOG_FILE)
+    os.rmdir(TEST_DIR)

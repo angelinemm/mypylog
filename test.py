@@ -4,6 +4,7 @@ import os
 
 TEST_DIR = './nosetests'
 LOG_FILE = TEST_DIR + '/log'
+OTHER_LOG_FILE = TEST_DIR + '/otherlog'
 DEBUG_MESSAGE = "This is a debug message"
 INFO_MESSAGE = "This is an info message"
 WARNING_MESSAGE = "This is a warning message"
@@ -31,5 +32,19 @@ def test_log():
         for index, level, message in messages:
             assert log_entries[index].endswith('%s: %s\n' % (level, message))
 
+    logger.update(logfile=OTHER_LOG_FILE, buffer_size=1)
+    logger.debug(DEBUG_MESSAGE)
+
+    with open(LOG_FILE, 'r') as log_file:
+        log_entries = log_file.readlines()
+
+        assert len(log_entries) == 4
+
+    with open(OTHER_LOG_FILE, 'r') as other_log_file:
+        log_entries = other_log_file.readlines()
+        assert len(log_entries) == 1
+        assert log_entries[0].endswith('%s: %s\n' % (Level.DEBUG, DEBUG_MESSAGE))
+
     os.remove(LOG_FILE)
+    os.remove(OTHER_LOG_FILE)
     os.rmdir(TEST_DIR)

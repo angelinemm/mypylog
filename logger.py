@@ -31,6 +31,13 @@ class Logger(object):
             self._log = sys.stdout
         self._loglevel = log_level
 
+    def update(self, logfile=None, log_level=None, buffer_size=None):
+        if logfile:
+            self._log = open(logfile, 'a', buffer_size)
+
+        if log_level:
+            self._loglevel = log_level
+
     def debug(self, message):
         if(self._loglevel <= Level.DEBUG):
             self._write(message, Level.DEBUG)

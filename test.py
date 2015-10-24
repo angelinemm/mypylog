@@ -45,6 +45,23 @@ def test_log():
         assert len(log_entries) == 1
         assert log_entries[0].endswith('%s: %s\n' % (Level.DEBUG, DEBUG_MESSAGE))
 
+    logger.update(log_level=Level.WARNING)
+    logger.info(INFO_MESSAGE)
+    logger.warning(WARNING_MESSAGE)
+    logger.error(ERROR_MESSAGE)
+
+    with open(OTHER_LOG_FILE, 'r') as other_log_file:
+        log_entries = other_log_file.readlines()
+        print len(log_entries)
+        assert len(log_entries) == 3
+        messages = [
+            (0, Level.DEBUG, DEBUG_MESSAGE),
+            (1, Level.WARNING, WARNING_MESSAGE),
+            (2, Level.ERROR, ERROR_MESSAGE),
+        ]
+        for index, level, message in messages:
+            assert log_entries[index].endswith('%s: %s\n' % (level, message))
+
     os.remove(LOG_FILE)
     os.remove(OTHER_LOG_FILE)
     os.rmdir(TEST_DIR)
